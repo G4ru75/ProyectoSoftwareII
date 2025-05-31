@@ -35,7 +35,7 @@ function Navbar() {
         </div>
 
         <nav className={`${NavbarStyle.menu} ${menuAbierto ? NavbarStyle.show : ""}`}>
-        <Link to="/">Inicio</Link>
+        <Link to="/PaginaPrincipal">Inicio</Link>
         <Link to="/informacion">Informacion</Link>
         <Link to="/informacion">Contacto</Link>
         <Link to="/login">Iniciar Sesion</Link>
