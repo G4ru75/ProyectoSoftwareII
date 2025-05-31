@@ -4,12 +4,12 @@ import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Ticket from './Ticket';
+import Swal from 'sweetalert2';
 
 function EspecificacionDeCompra({ handleClose }) {
     const location = useLocation();
     const evento = location.state?.evento;
 
-    // Estados para manejar el formulario
     const [cantidad, setCantidad] = useState(1);
     const [categoria, setCategoria] = useState(evento?.categoria || '');
     const [metodoPago, setMetodoPago] = useState('');
@@ -17,28 +17,57 @@ function EspecificacionDeCompra({ handleClose }) {
     const [ticket, setTicket] = useState(null);
 
     const precio = evento?.precioTicket || 0;
-    const total = cantidad * precio;
+
+    const calcularPrecioConCategoria = () => {
+        let incremento = 0;
+        switch (categoria) {
+            case 'VIP':
+                incremento = 0.15;
+                break;
+            case 'Premium':
+                incremento = 0.20;
+                break;
+            case 'Estándar':
+                incremento = 0.05;
+                break;
+            default:
+                incremento = 0;
+        }
+        return precio + (precio * incremento);
+    };
+
+    const total = cantidad * calcularPrecioConCategoria();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!metodoPago) {
-            alert('Seleccione un método de pago');
+            Swal.fire({
+                icon: 'warning',
+                title: 'metodo de pago no seleccionada',
+                text: 'Por favor, seleccione un metodo de pago para continuar.',
+                confirmButtonText: 'Aceptar'
+            });
             return;
         }
         if (!categoria) {
-            alert('Seleccione una categoría');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Categoría no seleccionada',
+                text: 'Por favor, seleccione una categoría para continuar.',
+                confirmButtonText: 'Aceptar'
+            });
             return;
         }
 
         const token = Cookies.get('token');
         const ticketDto = {
-            Precio: evento.precioTicket,
+            Precio: calcularPrecioConCategoria(),
             Nombre_Evento: evento.nombre_Evento,
             Categoria: categoria,
             Fecha_Entrada: new Date(evento.fecha).toISOString(),
             Id_Evento: evento.id_Evento
         };
-        console.log(ticketDto);
+
         const res = await fetch(`https://localhost:7047/api/Tickets/${cantidad}`, {
             method: 'POST',
             headers: {
@@ -47,16 +76,23 @@ function EspecificacionDeCompra({ handleClose }) {
             },
             body: JSON.stringify(ticketDto)
         });
+
         if (res.ok) {
-            // Obtén los tickets del usuario
+            Swal.fire({
+                icon: 'success',
+                title: 'Compra exitosa',
+                text: `Has comprado ${cantidad} entradas para el evento ${evento.nombre_Evento}.`,
+                confirmButtonText: 'Aceptar'
+            });
+
             const payload = JSON.parse(atob(token.split('.')[1]));
             const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
             const resTickets = await fetch(`https://localhost:7047/api/Tickets/${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+
             if (resTickets.ok) {
                 const data = await resTickets.json();
-                // Muestra el último ticket comprado
                 const ultimoTicket = data.tickets[data.tickets.length - 1];
                 setTicket(ultimoTicket);
                 setTicketModalOpen(true);
@@ -103,12 +139,11 @@ function EspecificacionDeCompra({ handleClose }) {
                         </select>
                     </div>
                     <div className="mb-3">
-                        <label className="block text-sm font-bold mb-1">PRECIO</label>
+                        <label className="block text-sm font-bold mb-1">PRECIO UNITARIO CON CATEGORÍA</label>
                         <input
                             type="text"
-                            value={evento.precioTicket}
+                            value={calcularPrecioConCategoria().toFixed(2)}
                             className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
                             readOnly
                         />
                     </div>
@@ -128,7 +163,7 @@ function EspecificacionDeCompra({ handleClose }) {
                         <label className="block text-sm font-bold mb-1">TOTAL:</label>
                         <input
                             type="text"
-                            value={total}
+                            value={total.toFixed(2)}
                             className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             readOnly
                         />
