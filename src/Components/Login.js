@@ -4,13 +4,22 @@ import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {Link, useNavigate} from 'react-router-dom';
+import Loader from './Loader';
 import Cookies from 'js-cookie'; //Libreria para manejar cookies
 
+const StyleModal = {
+  modal: "fixed top-0 left-0 w-screen h-screen flex items-center justify-center rounded-lg boder border-black"
+}
 
 function Login() {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [errores, setErrores] = useState({});
+  const [Cargando, setCargando] = useState(false); 
+
+  const CerrarModal = () => {
+    setCargando(false); 
+  }
 
   const navegar = useNavigate();
 
@@ -27,6 +36,8 @@ function Login() {
 
   const handleIniciarSesion = (e) => {
     e.preventDefault();
+
+
     if (Object.keys(errores).length === 0) {
 
       const Usuario = {
@@ -34,6 +45,7 @@ function Login() {
         contrasena: contraseña
       }
 
+      setCargando(true); 
       fetch('https://localhost:7047/api/Login', {
         method: 'POST',
         headers: {
@@ -44,7 +56,8 @@ function Login() {
       })
 
       .then(async response => {
-        const mensaje = await response.text(); //Aqui se tiene que transformar a texto
+        const mensaje = await response.text(); 
+        setCargando(false);                   //Aqui se tiene que transformar a texto
         if (!response.ok){                    //Porque los locos del back devuelven un texto plano 
           Swal.fire({                         //el mensajito de credenciales incorrectas
             icon: 'error',
@@ -53,7 +66,7 @@ function Login() {
           });
 
         } else {
-
+          setCargando(false);
           let data = JSON.parse(mensaje); //Aqui se tiene que parsear a JSON porque los datos si lo mandan como JSON       
 
           Cookies.set('token', data.token, {
@@ -119,6 +132,12 @@ function Login() {
         </div>
       </div>
     </div>
+
+    {Cargando && (
+      <div className={StyleModal.modal}>
+        <Loader/>
+      </div>
+      )}
     </>
     
   );

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Ticket from './Ticket';
 import Swal from 'sweetalert2';
+import Loader from './Loader';
 
 function EspecificacionDeCompra({ handleClose }) {
     const location = useLocation();
@@ -15,6 +16,7 @@ function EspecificacionDeCompra({ handleClose }) {
     const [metodoPago, setMetodoPago] = useState('');
     const [ticketModalOpen, setTicketModalOpen] = useState(false);
     const [ticket, setTicket] = useState(null);
+    const [Cargando, setCargando] = useState(false); 
 
     const precio = evento?.precioTicket || 0;
 
@@ -40,6 +42,7 @@ function EspecificacionDeCompra({ handleClose }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        
         if (!metodoPago) {
             Swal.fire({
                 icon: 'warning',
@@ -68,6 +71,7 @@ function EspecificacionDeCompra({ handleClose }) {
             Id_Evento: evento.id_Evento
         };
 
+        setCargando(true); 
         const res = await fetch(`https://localhost:7047/api/Tickets/${cantidad}`, {
             method: 'POST',
             headers: {
@@ -78,6 +82,7 @@ function EspecificacionDeCompra({ handleClose }) {
         });
 
         if (res.ok) {
+            setCargando(false);
             Swal.fire({
                 icon: 'success',
                 title: 'Compra exitosa',
@@ -98,7 +103,12 @@ function EspecificacionDeCompra({ handleClose }) {
                 setTicketModalOpen(true);
             }
         } else {
-            alert('Error al comprar el ticket');
+            setCargando(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error',
+                text: `No se pudo completar la compra. Por favor, inténtelo de nuevo más tarde.`,
+            });
         }
     };
 

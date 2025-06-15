@@ -21,6 +21,7 @@ import PaginaSignUp from './Components/PaginaSignUp';
 import GenerarReporte from './Components/GenerarReportes';
 import PanelDeControl from './Components/PanelDeControl';
 import AgregarCategoria from './Components/AgregarCategoria';
+import Loader from './Components/Loader';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { List } from 'lucide-react';
 

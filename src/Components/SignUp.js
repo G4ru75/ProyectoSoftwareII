@@ -5,6 +5,8 @@ import Footer from './Footer';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from 'bootstrap/dist/js/bootstrap.bundle.min';
+import Loader from './Loader';
+
 
 function Signup() {
   const [nombre, setNombre] = useState('');
@@ -14,6 +16,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [errores, setErrores] = useState({});
+  const [Cargando, setCargando] = useState(false); // Estado para controlar el cargando
 
   const navegar = useNavigate();
   useEffect(() => {
@@ -51,6 +54,7 @@ function Signup() {
 const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.keys(errores).length === 0) {
+      setCargando(true); // Activar el cargando
 
         const Usuario = {
           nombre: nombre,
@@ -69,6 +73,7 @@ const handleSubmit = (e) => {
                 body: JSON.stringify(Usuario)
 
             }).then(async response => {
+              setCargando(false); 
           const mensaje = await response.text(); // como desde la Api mandan el mensaje en texto plano
           if (!response.ok) {                   // entonces esa linea lo cambia a tect en el front
             Swal.fire({

@@ -25,13 +25,13 @@ function Navbar() {
         <h1 className={NavbarStyle.title} onClick={IrAInicio}>Boletas ya</h1>
         <div style={{display: 'flex', alignItems: 'center', gap: '40px'}}>
             <div>
-            <TicketsButton />
-        </div>
-        <div className={NavbarStyle.hamburger} onClick={toggleMenu}>
-            <span/>
-            <span/>
-            <span/>
-        </div>
+                <TicketsButton />
+            </div>
+            <div className={NavbarStyle.hamburger} onClick={toggleMenu}>
+                <span/>
+                <span/>
+                <span/>
+            </div>
         </div>
 
         <nav className={`${NavbarStyle.menu} ${menuAbierto ? NavbarStyle.show : ""}`}>
