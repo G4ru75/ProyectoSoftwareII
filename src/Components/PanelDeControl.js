@@ -247,7 +247,7 @@ function PanelDeControl() {
     </div>
     <Footer />
 
-      {/*modales para eventos*/}
+    {/*modales para eventos*/}
     {mostrarAgregarEvento && (
             <div className={STYLES.modal}>
             <div className={STYLES.modalContenido}>
