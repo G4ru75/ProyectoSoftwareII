@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {Link, useNavigate} from 'react-router-dom';
 import Loader from './Loader';
-import Cookies from 'js-cookie'; //Libreria para manejar cookies
+import { setSecureCookie, sanitizeInput } from '../utils/securityHelpers';
 
 const StyleModal = {
   modal: "fixed top-0 left-0 w-screen h-screen flex items-center justify-center rounded-lg boder border-black"
@@ -40,10 +40,24 @@ function Login() {
 
     if (Object.keys(errores).length === 0) {
 
+      // Sanitizar entradas del usuario
+      const usuarioSanitizado = sanitizeInput(nombreUsuario);
+      
       const Usuario = {
-        nombreUsuario: nombreUsuario,
-        contrasena: contraseña
+        nombreUsuario: usuarioSanitizado,
+        contrasena: contraseña // La contraseña no se sanitiza para no alterar los caracteres
       }
+
+      if(!Usuario.nombreUsuario || Usuario.nombreUsuario.length<3 || Usuario.nombreUsuario.length>20 || !Usuario.contrasena)
+        {
+          Swal.fire({                        
+            icon: 'error',
+            title: 'Oops...',
+            text: "El nombre de usuario debe tener entre 3 y 20 caracteres o verifique la contraseña",
+          });
+          return; 
+        }
+
 
       setCargando(true); 
       fetch('https://localhost:7047/api/Login', {
@@ -69,17 +83,10 @@ function Login() {
           setCargando(false);
           let data = JSON.parse(mensaje); //Aqui se tiene que parsear a JSON porque los datos si lo mandan como JSON       
 
-          Cookies.set('token', data.token, {
-            expires: 1,// La cookie expirará en 1 día
-            secure: true, // Solo se enviará a través de HTTPS
-            sameSite: 'Strict' // La cookie no se enviará con solicitudes de terceros
-          })
-
-          Cookies.set('user', JSON.stringify(data.user), {
-            expires: 1, // La cookie expirará en 1 día
-            secure: true, // Solo se enviará a través de HTTPS
-            sameSite: 'Strict' // La cookie no se enviará con solicitudes de terceros
-          });
+          // Usar cookies seguras
+          setSecureCookie('token', data.token, { expires: 1 });
+          setSecureCookie('user', JSON.stringify(data.user), { expires: 1 });
+          
           setNombreUsuario('');
           setContraseña('');
 
@@ -87,14 +94,14 @@ function Login() {
             Swal.fire({                     //Donde va el token y el user
             icon: 'success',
             title: 'Éxito',
-            text: `Bienvenido usuario ${data.user.nombre} ${data.user.apellido}`,
+            text: `Bienvenido usuario ${sanitizeInput(data.user.nombre)} ${sanitizeInput(data.user.apellido)}`,
           });
             navegar('/PaginaPrincipal'); //Ir a principal si los datos si el usuario es usuario jsndajsddfsdj
           }else if(data.user.rol === 'Admin'){
             Swal.fire({                     //Donde va el token y el user
             icon: 'success',
             title: 'Éxito',
-            text: `Bienvenido admin ${data.user.nombre} ${data.user.apellido}`,
+            text: `Bienvenido admin ${sanitizeInput(data.user.nombre)} ${sanitizeInput(data.user.apellido)}`,
           });
             navegar('/paginaAdmin'); //Ir a panel de control si el usuario es admin
           }

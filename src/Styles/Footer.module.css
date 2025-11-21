@@ -1,73 +1,140 @@
 .footer {
-background-color: #356fd3;
-color: white;
-display: flex;
-justify-content: space-between;
-padding: 30px 40px;
-flex-wrap: wrap;
-text-align: center;
+    background-color: #1e293b;
+    color: white;
+    padding: 0;
+    margin-top: auto;
 }
 
-.column {
-flex: 1;
-min-width: 200px;
-margin: 10px 0;
-
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 20px;
 }
 
-.title {
-font-family: sans-serif;
-font-weight: bold;
-font-size: 1.3rem;
-margin-bottom: 8px;
+.mainSection {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.brandColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.brandName {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    color: #3b82f6;
+    letter-spacing: -0.5px;
+}
+
+.brandTagline {
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.linksColumn,
+.contactColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.columnTitle {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .link {
-font-family: sans-serif;
-font-size: 1.1rem;
-color: white;
-text-decoration: none;
-margin: 4px 0;
-display: block;
-transition: color 0.2s;
-padding: 9px 0;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+    width: fit-content;
 }
 
 .link:hover {
-color: #cfd8dc;
-text-decoration: underline;
+    color: #3b82f6;
 }
 
-.NombreP{
-display: flex;
-justify-content: center;
-font-family: sans-serif;
-font-size: 3rem;
-color: white;
-font-weight: bold;
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.contactItem svg {
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.divider {
+    height: 1px;
+    background-color: #334155;
+    margin: 20px 0;
+}
+
+.copyright {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.copyright p {
+    margin: 0;
+    font-size: 13px;
+    color: #94a3b8;
 }
 
 @media (max-width: 768px) {
-.footer {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    .mainSection {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .brandColumn {
+        align-items: center;
+    }
+
+    .linksColumn,
+    .contactColumn {
+        align-items: center;
+    }
+
+    .link {
+        width: auto;
+    }
+
+    .brandName {
+        font-size: 24px;
+    }
+
+    .container {
+        padding: 30px 20px 15px;
+    }
 }
 
-.column {
-    text-align: center;
-}
+@media (max-width: 480px) {
+    .brandName {
+        font-size: 22px;
+    }
 
-.link {
-    font-size: 1rem;
-}
+    .contactItem {
+        font-size: 13px;
+    }
 
-.NombreP{
-    font-size: 2rem;
-}
-
-.column {
-    font-size: 1rem;
-}
-
+    .columnTitle {
+        font-size: 13px;
+    }
 }

@@ -13,6 +13,15 @@ function AgregarCategoria({ onAgregar }) {
             nombre: nombre
         }
 
+        if(!Categoria.nombre || Categoria.nombre.length<3 || Categoria.nombre.length>20){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "El nombre de la categoría debe tener entre 3 y 20 caracteres",
+            });
+            return;
+        }
+
         const token = Cookies.get('token'); 
 
         fetch("https://localhost:7047/api/Categorias", {

@@ -1,107 +1,215 @@
 import Footer from "./Footer"
 import NavBar from "./navbar"
 import { useNavigate, useLocation } from "react-router-dom"
+import { useState, useEffect } from "react"
+import Cookies from 'js-cookie'
+import Swal from 'sweetalert2'
+import { MapPin, Calendar, Clock, Tag, Ticket, DollarSign, Info } from 'lucide-react'
+import compraBoleta from '../Styles/CompraBoleta.module.css'
 
 function CompraBoleta() {
 
     const navigate = useNavigate();
     const Location = useLocation();
-    const evento = Location.state?.evento;
+    const eventoInicial = Location.state?.evento;
+    
+    const [evento, setEvento] = useState(eventoInicial);
+    
+    // Función para actualizar los datos del evento
+    const actualizarEvento = async () => {
+        if (!eventoInicial?.id_Evento) return;
+        
+        try {
+            const response = await fetch(`https://localhost:7047/api/Eventos/${eventoInicial.id_Evento}`);
+            if (response.ok) {
+                const eventoActualizado = await response.json();
+                setEvento(eventoActualizado);
+            }
+        } catch (error) {
+            console.error('Error al actualizar evento:', error);
+        }
+    };
+    
+    // Actualizar evento al montar el componente y cada 5 segundos
+    useEffect(() => {
+        actualizarEvento();
+        const intervalo = setInterval(actualizarEvento, 5000);
+        return () => clearInterval(intervalo);
+    }, [eventoInicial?.id_Evento]);
     
     if (!evento) {
         return <p className='text-center mt-10 text-red-500'>No se ha seleccionado ningún evento.</p>;
     }
 
-    const fechaCompleta = new Date(evento.fecha); // Toma la fecha del evento en formato Date
-    const fecha = fechaCompleta.toLocaleDateString(); 
-    const hora = fechaCompleta.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formatea la hora
-    //las separa y formatea la fecha y hora en formatos string y de manera local
+    const fechaCompleta = new Date(evento.fecha);
+    const fecha = fechaCompleta.toLocaleDateString('es-ES', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    const hora = fechaCompleta.toLocaleTimeString('es-ES', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
 
 
     const IrAEspecificacionCompra = () => {
+        // Verificar si hay un usuario logueado
+        const token = Cookies.get('token');
+        
+        if (!token) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Sesión requerida',
+                text: 'Debes iniciar sesión para poder comprar boletas.',
+                confirmButtonText: 'Iniciar Sesión',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login');
+                }
+            });
+            return;
+        }
+        
         navigate("/especificacionCompra", {state:{evento}}); // Pasa evento por state
     }
 
 return (
     <>
     <NavBar/>
-    <div className="container mx-auto p-4 max-w-6xl">
-        <div className="flex flex-col md:flex-row gap-4">
+    <div className={compraBoleta.container}>
+        <div className={compraBoleta.content}>
 
-
-        <div className="bg-gray-200 rounded-lg p-6 flex-1">
-            <h2 className="text-xl font-bold text-center mb-6">INFORMACIÓN EVENTO</h2>
-
-            <div className="space-y-6">
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Lugar</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{evento.nombre_Lugar}</p>
-            </div>
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Direccion</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{evento.direccion_Lugar}</p>
-            </div>
-
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Fecha</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{fecha}</p>
-            </div>
-
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Hora</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{hora}</p>
+        {/* Columna izquierda - Imagen y descripción */}
+        <div className={compraBoleta.leftColumn}>
+            {/* Imagen del evento */}
+            <div className={compraBoleta.imageContainer}>
+                {evento.imagen ? (
+                    <img 
+                        src={`data:image/jpeg;base64,${evento.imagen}`} 
+                        alt={evento.nombre_Evento}
+                        className={compraBoleta.eventImage}
+                    />
+                ) : (
+                    <div className={compraBoleta.imagePlaceholder}>
+                        <Info size={48} />
+                        <p>Sin imagen disponible</p>
+                    </div>
+                )}
+                <div className={compraBoleta.categoryBadge}>
+                    <Tag size={16} />
+                    {evento.categoria}
+                </div>
             </div>
 
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Categoría</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{evento.categoria}</p>
-            </div>
+            {/* Título del evento */}
+            <h1 className={compraBoleta.eventTitle}>{evento.nombre_Evento}</h1>
 
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Entradas disponibles</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{evento.tickets_Disponible}</p>
+            {/* Descripción */}
+            <div className={compraBoleta.descriptionCard}>
+                <h3 className={compraBoleta.sectionTitle}>
+                    <Info size={20} />
+                    Descripción del evento
+                </h3>
+                <p className={compraBoleta.description}>{evento.descripcion}</p>
             </div>
-
-            <div>
-                <p className="font-semibold text-gray-800 mb-1">Estado</p>
-                <p className="text-gray-700 border-b border-gray-400 pb-1">{evento.estado ? "Abierto" : "cerrado"}</p>
-            </div>
-            </div>
-
-
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transform transition-all hover:scale-105"
-            onClick={IrAEspecificacionCompra}>COMPRAR
-            </button>
         </div>
 
-        <div className="bg-gray-200 rounded-lg p-6 flex-1">
-        {evento.imagen ? (
-            <div className="bg-gray rounded-lg h-80 flex items-center justify-center mb-6 overflow-hidden">
-            <img src={`data:image/jpeg;base64,${evento.imagen}`} alt={`Imagen de evento`}className="w-full h-full object-contain"
-            
-            />
+        {/* Columna derecha - Información y compra */}
+        <div className={compraBoleta.rightColumn}>
+            {/* Card de información */}
+            <div className={compraBoleta.infoCard}>
+                <h2 className={compraBoleta.cardTitle}>Información del Evento</h2>
 
-            </div>
-            ) : (
-            <div className="bg-white rounded-lg h-80 flex items-center justify-center mb-6">
-                <p className="text-gray-700 font-medium">Imagen Evento</p>
-            </div>
-            )}
+                <div className={compraBoleta.infoGrid}>
+                    <div className={compraBoleta.infoItem}>
+                        <div className={compraBoleta.infoIcon}>
+                            <Calendar size={20} />
+                        </div>
+                        <div className={compraBoleta.infoContent}>
+                            <span className={compraBoleta.infoLabel}>Fecha</span>
+                            <span className={compraBoleta.infoValue}>{fecha}</span>
+                        </div>
+                    </div>
 
-        <div className="flex justify-between mb-4">
-            <div>
-                <p className="font-semibold text-gray-800">Nombre</p>
-                <p className="text-gray-700">{evento.nombre_Evento}</p>
-            </div>
-            <div>
-                <p className="font-semibold text-gray-800">Precio</p>
-                <p className="text-gray-700">{evento.precioTicket}</p>
-            </div>
+                    <div className={compraBoleta.infoItem}>
+                        <div className={compraBoleta.infoIcon}>
+                            <Clock size={20} />
+                        </div>
+                        <div className={compraBoleta.infoContent}>
+                            <span className={compraBoleta.infoLabel}>Hora</span>
+                            <span className={compraBoleta.infoValue}>{hora}</span>
+                        </div>
+                    </div>
+
+                    <div className={compraBoleta.infoItem}>
+                        <div className={compraBoleta.infoIcon}>
+                            <MapPin size={20} />
+                        </div>
+                        <div className={compraBoleta.infoContent}>
+                            <span className={compraBoleta.infoLabel}>Lugar</span>
+                            <span className={compraBoleta.infoValue}>{evento.nombre_Lugar}</span>
+                        </div>
+                    </div>
+
+                    <div className={compraBoleta.infoItem}>
+                        <div className={compraBoleta.infoIcon}>
+                            <MapPin size={20} />
+                        </div>
+                        <div className={compraBoleta.infoContent}>
+                            <span className={compraBoleta.infoLabel}>Dirección</span>
+                            <span className={compraBoleta.infoValue}>{evento.direccion_Lugar}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="mt-4">
-                <p className="font-semibold text-gray-800 text-center mb-2">Descripción del evento</p>
-                <p className="text-gray-700 text-sm">{evento.descripcion}</p>
+            {/* Card de precio y disponibilidad */}
+            <div className={compraBoleta.purchaseCard}>
+                <div className={compraBoleta.priceSection}>
+                    <div className={compraBoleta.priceLabel}>
+                        <DollarSign size={20} />
+                        Precio por entrada
+                    </div>
+                    <div className={compraBoleta.priceValue}>
+                        ${evento.precioTicket}
+                    </div>
+                </div>
+
+                <div className={compraBoleta.availabilitySection}>
+                    <div className={compraBoleta.availabilityLabel}>
+                        <Ticket size={20} />
+                        Entradas disponibles
+                    </div>
+                    <div className={`${compraBoleta.availabilityValue} ${
+                        evento.tickets_Disponible < 10 ? compraBoleta.lowStock : 
+                        evento.tickets_Disponible < 50 ? compraBoleta.mediumStock : 
+                        compraBoleta.highStock
+                    }`}>
+                        {evento.tickets_Disponible > 0 ? evento.tickets_Disponible : 'Agotado'}
+                    </div>
+                    {evento.tickets_Disponible < 20 && evento.tickets_Disponible > 0 && (
+                        <div className={compraBoleta.stockWarning}>
+                            ¡Últimas entradas disponibles!
+                        </div>
+                    )}
+                </div>
+
+                <button 
+                    className={compraBoleta.buyButton}
+                    onClick={IrAEspecificacionCompra}
+                    disabled={evento.tickets_Disponible === 0}
+                >
+                    {evento.tickets_Disponible > 0 ? 'Comprar Entradas' : 'Agotado'}
+                </button>
+
+                <div className={compraBoleta.statusBadge}>
+                    <div className={`${compraBoleta.statusDot} ${evento.estado ? compraBoleta.statusOpen : compraBoleta.statusClosed}`}></div>
+                    {evento.estado ? "Evento Abierto" : "Evento Cerrado"}
+                </div>
             </div>
         </div>
 

@@ -1,14 +1,17 @@
 import NavBar from './navbar';
 import Footer from './Footer';
-import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Ticket from './Ticket';
 import Swal from 'sweetalert2';
 import Loader from './Loader';
+import { ShoppingCart, Calendar, Tag, CreditCard, Ticket as TicketIcon, DollarSign, AlertCircle } from 'lucide-react';
+import especificacionStyle from '../Styles/EspecificacionDeCompra.module.css';
 
 function EspecificacionDeCompra({ handleClose }) {
     const location = useLocation();
+    const navigate = useNavigate();
     const evento = location.state?.evento;
 
     const [cantidad, setCantidad] = useState(1);
@@ -16,7 +19,25 @@ function EspecificacionDeCompra({ handleClose }) {
     const [metodoPago, setMetodoPago] = useState('');
     const [ticketModalOpen, setTicketModalOpen] = useState(false);
     const [ticket, setTicket] = useState(null);
-    const [Cargando, setCargando] = useState(false); 
+    const [Cargando, setCargando] = useState(false);
+    const [ticketsDisponibles, setTicketsDisponibles] = useState(evento?.tickets_Disponible || 0);
+    
+    // Verificar si hay sesión al cargar el componente
+    useEffect(() => {
+        const token = Cookies.get('token');
+        
+        if (!token) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Sesión requerida',
+                text: 'Debes iniciar sesión para poder comprar boletas.',
+                confirmButtonText: 'Iniciar Sesión',
+                allowOutsideClick: false
+            }).then(() => {
+                navigate('/login');
+            });
+        }
+    }, [navigate]); 
 
     const precio = evento?.precioTicket || 0;
 
@@ -61,6 +82,28 @@ function EspecificacionDeCompra({ handleClose }) {
             });
             return;
         }
+        
+        // Validar que la cantidad no exceda los tickets disponibles
+        if (cantidad > ticketsDisponibles) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Cantidad no disponible',
+                text: `Solo quedan ${ticketsDisponibles} tickets disponibles.`,
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+        
+        // Validar que haya tickets disponibles
+        if (ticketsDisponibles <= 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Agotado',
+                text: 'Lo sentimos, no hay tickets disponibles para este evento.',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
 
         const token = Cookies.get('token');
         const ticketDto = {
@@ -83,6 +126,10 @@ function EspecificacionDeCompra({ handleClose }) {
 
         if (res.ok) {
             setCargando(false);
+            
+            // Actualizar tickets disponibles
+            setTicketsDisponibles(prevTickets => prevTickets - cantidad);
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Compra exitosa',
@@ -119,90 +166,198 @@ function EspecificacionDeCompra({ handleClose }) {
     return (
         <>
             <NavBar />
-            <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-xl shadow-md w-full max-w-4xl mx-auto my-8">
-                <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">COMPRAR ENTRADAS</h1>
-                <div className="border-2 border-blue-500 mb-6"></div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    <div className="mb-3">
-                        <label className="block text-sm font-bold mb-1">NOMBRE EVENTO</label>
-                        <input
-                            type="text"
-                            value={evento.nombre_Evento}
-                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                            readOnly
-                        />
+            <div className={especificacionStyle.container}>
+                <div className={especificacionStyle.content}>
+                    {/* Encabezado */}
+                    <div className={especificacionStyle.header}>
+                        <ShoppingCart size={32} />
+                        <h1 className={especificacionStyle.title}>Finalizar Compra</h1>
+                        <p className={especificacionStyle.subtitle}>Completa los detalles de tu compra</p>
                     </div>
-                    <div className="mb-3">
-                        <label className="block text-sm font-bold mb-1">CATEGORIA DE ENTRADA</label>
-                        <select
-                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={categoria}
-                            onChange={e => setCategoria(e.target.value)}
-                            required
-                        >
-                            <option value="">Seleccione una categoría</option>
-                            <option value="General">General</option>
-                            <option value="Estándar">Estándar</option>
-                            <option value="Premium">Premium</option>
-                            <option value="VIP">VIP</option>
-                        </select>
-                    </div>
-                    <div className="mb-3">
-                        <label className="block text-sm font-bold mb-1">PRECIO UNITARIO CON CATEGORÍA</label>
-                        <input
-                            type="text"
-                            value={calcularPrecioConCategoria().toFixed(2)}
-                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            readOnly
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="block text-sm font-bold mb-1">CANTIDAD</label>
-                        <input
-                            type="number"
-                            min={1}
-                            max={evento.tickets_Disponible}
-                            value={cantidad}
-                            onChange={e => setCantidad(Number(e.target.value))}
-                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                    </div>
-                    <div className="md:col-span-2 mb-3">
-                        <label className="block text-sm font-bold mb-1">TOTAL:</label>
-                        <input
-                            type="text"
-                            value={total.toFixed(2)}
-                            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            readOnly
-                        />
-                    </div>
-                    <div className="md:col-span-2 mb-4">
-                        <label className="block text-sm font-bold mb-1">SELECCIONA METODO DE PAGO</label>
-                        <div className="space-y-2">
-                            <div className="flex items-center">
-                                <input className="h-4 w-4 border-gray-300 rounded" type="radio" name="metodoPago" id="tarjetaDebito" value="tarjetaDebito" onChange={e => setMetodoPago(e.target.value)} />
-                                <label className="ml-2 block text-sm text-gray-700" htmlFor="tarjetaDebito">Tarjeta de débito</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input className="h-4 w-4 border-gray-300 rounded" type="radio" name="metodoPago" id="tarjetaCredito" value="tarjetaCredito" onChange={e => setMetodoPago(e.target.value)} />
-                                <label className="ml-2 block text-sm text-gray-700" htmlFor="tarjetaCredito">Tarjeta de crédito</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input className="h-4 w-4 border-gray-300 rounded" type="radio" name="metodoPago" id="transferenciaPse" value="transferenciaPse" onChange={e => setMetodoPago(e.target.value)} />
-                                <label className="ml-2 block text-sm text-gray-700" htmlFor="transferenciaPse">Transferencia por PSE</label>
+
+                    <form onSubmit={handleSubmit} className={especificacionStyle.form}>
+                        {/* Información del Evento */}
+                        <div className={especificacionStyle.section}>
+                            <h2 className={especificacionStyle.sectionTitle}>
+                                <Calendar size={20} />
+                                Información del Evento
+                            </h2>
+                            <div className={especificacionStyle.eventInfo}>
+                                <div className={especificacionStyle.eventName}>
+                                    {evento.nombre_Evento}
+                                </div>
+                                <div className={especificacionStyle.eventDetails}>
+                                    <span>{new Date(evento.fecha).toLocaleDateString('es-ES', { 
+                                        weekday: 'long', 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric' 
+                                    })}</span>
+                                    <span className={especificacionStyle.separator}>•</span>
+                                    <span>{evento.nombre_Lugar}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <button
-                        type="submit"
-                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none transform transition-all hover:scale-105"
-                    >
-                        COMPRAR
-                    </button>
+
+                        {/* Selección de Categoría */}
+                        <div className={especificacionStyle.section}>
+                            <h2 className={especificacionStyle.sectionTitle}>
+                                <Tag size={20} />
+                                Categoría de Entrada
+                            </h2>
+                            <div className={especificacionStyle.categoryGrid}>
+                                {['General', 'Estándar', 'Premium', 'VIP'].map((cat) => {
+                                    const isSelected = categoria === cat;
+                                    let precio = evento.precioTicket;
+                                    let incremento = 0;
+                                    
+                                    switch (cat) {
+                                        case 'VIP':
+                                            incremento = 0.15;
+                                            break;
+                                        case 'Premium':
+                                            incremento = 0.20;
+                                            break;
+                                        case 'Estándar':
+                                            incremento = 0.05;
+                                            break;
+                                        default:
+                                            incremento = 0;
+                                    }
+                                    
+                                    const precioFinal = precio + (precio * incremento);
+                                    
+                                    return (
+                                        <button
+                                            key={cat}
+                                            type="button"
+                                            className={`${especificacionStyle.categoryCard} ${isSelected ? especificacionStyle.categoryCardSelected : ''}`}
+                                            onClick={() => setCategoria(cat)}
+                                        >
+                                            <div className={especificacionStyle.categoryName}>{cat}</div>
+                                            <div className={especificacionStyle.categoryPrice}>${precioFinal.toFixed(2)}</div>
+                                            {incremento > 0 && (
+                                                <div className={especificacionStyle.categoryIncrement}>+{(incremento * 100).toFixed(0)}%</div>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Cantidad */}
+                        <div className={especificacionStyle.section}>
+                            <h2 className={especificacionStyle.sectionTitle}>
+                                <TicketIcon size={20} />
+                                Cantidad de Entradas
+                            </h2>
+                            <div className={especificacionStyle.quantityControl}>
+                                <button
+                                    type="button"
+                                    className={especificacionStyle.quantityButton}
+                                    onClick={() => setCantidad(Math.max(1, cantidad - 1))}
+                                    disabled={cantidad <= 1}
+                                >
+                                    -
+                                </button>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={ticketsDisponibles}
+                                    value={cantidad}
+                                    onChange={e => setCantidad(Number(e.target.value))}
+                                    className={especificacionStyle.quantityInput}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className={especificacionStyle.quantityButton}
+                                    onClick={() => setCantidad(Math.min(ticketsDisponibles, cantidad + 1))}
+                                    disabled={cantidad >= ticketsDisponibles}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <div className={`${especificacionStyle.availabilityInfo} ${
+                                ticketsDisponibles < 10 ? especificacionStyle.lowStock : 
+                                ticketsDisponibles < 50 ? especificacionStyle.mediumStock : 
+                                especificacionStyle.highStock
+                            }`}>
+                                <AlertCircle size={16} />
+                                {ticketsDisponibles > 0 
+                                    ? `${ticketsDisponibles} entradas disponibles` 
+                                    : 'Sin entradas disponibles'}
+                            </div>
+                        </div>
+
+                        {/* Método de Pago */}
+                        <div className={especificacionStyle.section}>
+                            <h2 className={especificacionStyle.sectionTitle}>
+                                <CreditCard size={20} />
+                                Método de Pago
+                            </h2>
+                            <div className={especificacionStyle.paymentGrid}>
+                                {[
+                                    { id: 'tarjetaDebito', label: 'Tarjeta de Débito', icon: '💳' },
+                                    { id: 'tarjetaCredito', label: 'Tarjeta de Crédito', icon: '💳' },
+                                    { id: 'transferenciaPse', label: 'Transferencia PSE', icon: '🏦' }
+                                ].map(method => (
+                                    <label
+                                        key={method.id}
+                                        className={`${especificacionStyle.paymentOption} ${
+                                            metodoPago === method.id ? especificacionStyle.paymentOptionSelected : ''
+                                        }`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="metodoPago"
+                                            value={method.id}
+                                            checked={metodoPago === method.id}
+                                            onChange={e => setMetodoPago(e.target.value)}
+                                            className={especificacionStyle.paymentRadio}
+                                        />
+                                        <span className={especificacionStyle.paymentIcon}>{method.icon}</span>
+                                        <span className={especificacionStyle.paymentLabel}>{method.label}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Resumen de Compra */}
+                        <div className={especificacionStyle.summary}>
+                            <h2 className={especificacionStyle.summaryTitle}>
+                                <DollarSign size={20} />
+                                Resumen de Compra
+                            </h2>
+                            <div className={especificacionStyle.summaryContent}>
+                                <div className={especificacionStyle.summaryRow}>
+                                    <span>Precio unitario ({categoria || 'Selecciona categoría'})</span>
+                                    <span>${categoria ? calcularPrecioConCategoria().toFixed(2) : '0.00'}</span>
+                                </div>
+                                <div className={especificacionStyle.summaryRow}>
+                                    <span>Cantidad</span>
+                                    <span>×{cantidad}</span>
+                                </div>
+                                <div className={especificacionStyle.summaryDivider}></div>
+                                <div className={especificacionStyle.summaryTotal}>
+                                    <span>Total a Pagar</span>
+                                    <span>${total.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Botón de Compra */}
+                        <button
+                            type="submit"
+                            className={especificacionStyle.submitButton}
+                            disabled={!categoria || !metodoPago || ticketsDisponibles === 0}
+                        >
+                            <ShoppingCart size={20} />
+                            Confirmar Compra
+                        </button>
+                    </form>
                 </div>
-            </form>
+            </div>
             <Ticket isOpen={ticketModalOpen} onClose={() => setTicketModalOpen(false)} ticket={ticket} />
             <Footer />
         </>

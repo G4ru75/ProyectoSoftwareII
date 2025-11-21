@@ -1,0 +1,96 @@
+Date : 2025-11-18 11:45:37
+Directory : c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas
+Total : 61 files,  21855 codes, 53 comments, 642 blanks, all 22550 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     17,742 |          0 |          3 |     17,745 |
+| JavaScript |         34 |      2,546 |         26 |        379 |      2,951 |
+| PostCSS    |         21 |      1,507 |          3 |        226 |      1,736 |
+| Markdown   |          1 |         38 |          0 |         33 |         71 |
+| HTML       |          1 |         21 |         24 |          1 |         46 |
+| XML        |          1 |          1 |          0 |          0 |          1 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                              | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                 |         61 |     21,855 |         53 |        642 |     22,550 |
+| . (Files)                                                                                                         |          3 |     17,755 |          0 |         35 |     17,790 |
+| public                                                                                                            |          2 |         46 |         24 |          2 |         72 |
+| src                                                                                                               |         56 |      4,054 |         29 |        605 |      4,688 |
+| src (Files)                                                                                                       |          8 |        133 |          7 |         22 |        162 |
+| src\Components                                                                                                    |         29 |      2,459 |         19 |        365 |      2,843 |
+| src\Styles                                                                                                        |         19 |      1,462 |          3 |        218 |      1,683 |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                          | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\README.md                                | Markdown   |         38 |          0 |         33 |         71 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\package-lock.json                        | JSON       |     17,671 |          0 |          1 |     17,672 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\package.json                             | JSON       |         46 |          0 |          1 |         47 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\public\index.html                        | HTML       |         21 |         24 |          1 |         46 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\public\manifest.json                     | JSON       |         25 |          0 |          1 |         26 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\App.css                              | PostCSS    |         33 |          0 |          6 |         39 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\App.js                               | JavaScript |         23 |          0 |          3 |         26 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\App.test.js                          | JavaScript |          7 |          0 |          2 |          9 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\AgregarCategoria.js       | JavaScript |         69 |          0 |         13 |         82 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\BarraBusqueda.js          | JavaScript |         63 |          0 |         13 |         76 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\CartaEvento.js            | JavaScript |         49 |          0 |         12 |         61 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\CompraBoleta.js           | JavaScript |         90 |          1 |         23 |        114 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\EditarCategoria.js        | JavaScript |         55 |          0 |          4 |         59 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\EditarEvento.js           | JavaScript |        237 |          2 |         31 |        270 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\EliminarEvento.js         | JavaScript |         91 |          1 |          9 |        101 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\EspecificacionDeCompra.js | JavaScript |        197 |          0 |         16 |        213 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Evento.js                 | JavaScript |        183 |          2 |         25 |        210 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Footer.js                 | JavaScript |         22 |          0 |          4 |         26 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\GenerarReportes.js        | JavaScript |        190 |          2 |         26 |        218 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Informacion.js            | JavaScript |         37 |          0 |         10 |         47 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\ListaCategoria.js         | JavaScript |         53 |          0 |          6 |         59 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\ListaEventos.js           | JavaScript |         34 |          0 |          6 |         40 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\ListaEventosAdmin.js      | JavaScript |         86 |          0 |          9 |         95 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\ListaReportes.js          | JavaScript |         72 |          0 |          4 |         76 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Loader.js                 | JavaScript |         11 |          0 |          2 |         13 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Login.js                  | JavaScript |        130 |          1 |         28 |        159 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\NavbarAdmin.js            | JavaScript |         30 |          0 |          5 |         35 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PaginaInformacion.js      | JavaScript |         13 |          0 |          2 |         15 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PaginaLogin.js            | JavaScript |         13 |          0 |          2 |         15 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PaginaPrincipal.js        | JavaScript |         19 |          0 |          6 |         25 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PaginaSignUp.js           | JavaScript |         13 |          0 |          1 |         14 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PanelDeControl.js         | JavaScript |        355 |          9 |         59 |        423 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\SignUp.js                 | JavaScript |        173 |          0 |         30 |        203 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Ticket.js                 | JavaScript |         34 |          1 |          4 |         39 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\TicketsButton.js          | JavaScript |         27 |          0 |          5 |         32 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\TicketsListModal.js       | JavaScript |         70 |          0 |          5 |         75 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\navbar.js                 | JavaScript |         43 |          0 |          5 |         48 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\AgregarCategoria.module.css   | PostCSS    |         52 |          0 |          8 |         60 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\BarraBusqueda.module.css      | PostCSS    |        123 |          1 |         19 |        143 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\CartaEvento.module.css        | PostCSS    |        127 |          0 |         20 |        147 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\EditarCategoria.module.css    | PostCSS    |         74 |          0 |         10 |         84 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\EliminarEvento.module.css     | PostCSS    |         99 |          0 |         13 |        112 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Footer.module.css             | PostCSS    |         61 |          0 |         13 |         74 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Informacion.module.css        | PostCSS    |         25 |          0 |          4 |         29 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\ListaCategoria.module.css     | PostCSS    |        122 |          0 |         17 |        139 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\ListaEventos.module.css       | PostCSS    |         12 |          0 |          1 |         13 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\ListaEventosAdmin.module.css  | PostCSS    |        113 |          1 |         17 |        131 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\ListaReportes.module.css      | PostCSS    |         72 |          0 |          9 |         81 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Loader.module.css             | PostCSS    |         35 |          0 |          3 |         38 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Login.module.css              | PostCSS    |        102 |          0 |         15 |        117 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\NavBar.module.css             | PostCSS    |        111 |          0 |         20 |        131 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\PanelDeControl.module.css     | PostCSS    |        106 |          1 |         21 |        128 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\SignUp.module.css             | PostCSS    |         92 |          0 |         20 |        112 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Ticket.module.css             | PostCSS    |         64 |          0 |          8 |         72 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\TicketsButton.module.css      | PostCSS    |         19 |          0 |          0 |         19 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\TicketsListModal.module.css   | PostCSS    |         53 |          0 |          0 |         53 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\index.css                            | PostCSS    |         12 |          0 |          2 |         14 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\index.js                             | JavaScript |         44 |          3 |          6 |         53 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\logo.svg                             | XML        |          1 |          0 |          0 |          1 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\reportWebVitals.js                   | JavaScript |         12 |          0 |          2 |         14 |
+| c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\setupTests.js                        | JavaScript |          1 |          4 |          1 |          6 |
+| Total                                                                                                             |            |     21,855 |         53 |        642 |     22,550 |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

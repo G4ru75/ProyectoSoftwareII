@@ -1,0 +1,25 @@
+"filename", "language", "JSON", "Markdown", "JavaScript", "PostCSS", "HTML", "comment", "blank", "total"
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\SECURITY.md", "Markdown", 0, 105, 0, 0, 0, 0, 45, 150
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\package-lock.json", "JSON", 174, 0, 0, 0, 0, 0, 0, 174
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\package.json", "JSON", 1, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\public\index.html", "HTML", 0, 0, 0, 0, 5, 1, 1, 7
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\BarraBusqueda.js", "JavaScript", 0, 0, 44, 0, 0, 1, 4, 49
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\CartaEvento.js", "JavaScript", 0, 0, 22, 0, 0, 0, 0, 22
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\CompraBoleta.js", "JavaScript", 0, 0, 103, 0, 0, 2, 3, 108
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\EspecificacionDeCompra.js", "JavaScript", 0, 0, 136, 0, 0, 4, 15, 155
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Evento.js", "JavaScript", 0, 0, 20, 0, 0, 2, 1, 23
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Footer.js", "JavaScript", 0, 0, 24, 0, 0, 0, 4, 28
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\GenerarReportes.js", "JavaScript", 0, 0, 39, 0, 0, 3, 4, 46
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\ListaEventos.js", "JavaScript", 0, 0, 45, 0, 0, 3, 8, 56
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Login.js", "JavaScript", 0, 0, -7, 0, 0, 2, 1, -4
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\NavbarAdmin.js", "JavaScript", 0, 0, 17, 0, 0, 1, 2, 20
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PaginaPrincipal.js", "JavaScript", 0, 0, 6, 0, 0, 0, 2, 8
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\PanelDeControl.js", "JavaScript", 0, 0, 35, 0, 0, 1, 5, 41
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\Ticket.js", "JavaScript", 0, 0, 217, 0, 0, 8, 21, 246
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Components\navbar.js", "JavaScript", 0, 0, 17, 0, 0, 1, 2, 20
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\CartaEvento.module.css", "PostCSS", 0, 0, 0, 53, 0, 0, 6, 59
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\CompraBoleta.module.css", "PostCSS", 0, 0, 0, 366, 0, 3, 62, 431
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\EspecificacionDeCompra.module.css", "PostCSS", 0, 0, 0, 379, 0, 10, 72, 461
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\Styles\Footer.module.css", "PostCSS", 0, 0, 0, 56, 0, 0, 11, 67
+"c:\Users\Dairo Duran\OneDrive\Documentos\PresentacionIng\ProyectoBoletas\src\utils\securityHelpers.js", "JavaScript", 0, 0, 60, 0, 0, 31, 15, 106
+"Total", "-", 175, 105, 778, 854, 5, 73, 284, 2274

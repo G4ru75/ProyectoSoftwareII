@@ -1,11 +1,19 @@
-import react, {useState} from 'react';
+import react, {useState, useEffect} from 'react';
 import NavbarStyle from '../Styles/NavBar.module.css';
 import {Link, useNavigate} from 'react-router-dom';
 import TicketsButton from './TicketsButton';
+import { getSecureCookie, clearSessionCookies } from '../utils/securityHelpers';
 
 function Navbar() {
     const [menuAbierto, setMenuAbierto] = useState(false);
+    const [usuarioLogueado, setUsuarioLogueado] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Verificar si hay un token en las cookies
+        const token = getSecureCookie('token');
+        setUsuarioLogueado(!!token);
+    }, []);
 
     const IrAInicio = () => {
         navigate('/');
@@ -15,6 +23,12 @@ function Navbar() {
     }
     const toggleMenu = () => {
         setMenuAbierto(!menuAbierto);
+    };
+
+    const cerrarSesion = () => {
+        clearSessionCookies();
+        setUsuarioLogueado(false);
+        navigate('/login');
     };
 
     return (
@@ -38,8 +52,14 @@ function Navbar() {
         <Link to="/PaginaPrincipal">Inicio</Link>
         <Link to="/informacion">Informacion</Link>
         <Link to="/informacion">Contacto</Link>
-        <Link to="/login">Iniciar Sesion</Link>
-        <Link to="/signup">Registrarse</Link>
+        {usuarioLogueado ? (
+            <a onClick={cerrarSesion} style={{ cursor: 'pointer' }}>Cerrar Sesión</a>
+        ) : (
+            <>
+                <Link to="/login">Iniciar Sesion</Link>
+                <Link to="/signup">Registrarse</Link>
+            </>
+        )}
         </nav>
     </header>
     );

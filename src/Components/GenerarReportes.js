@@ -42,10 +42,40 @@ function GenerarReporte() {
     const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Validar que se haya seleccionado un evento
+    if (!evento || !aforoMaximo) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe seleccionar un evento.',
+        });
+        return;
+    }
+
     // Convertimos a número por si vienen como strings
     const aforo = parseInt(aforoMaximo);
     const entradas = parseInt(totalEntradasVendidas);
     const asistencias = parseInt(totalAsistencias);
+
+    // Validar que los valores sean números válidos
+    if (isNaN(aforo) || isNaN(entradas) || isNaN(asistencias)) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Los valores numéricos no son válidos.',
+        });
+        return;
+    }
+
+    // Validar que no sean números negativos
+    if (entradas < 0 || asistencias < 0) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Los valores no pueden ser negativos.',
+        });
+        return;
+    }
 
     if (entradas > aforo) {
         Swal.fire({
@@ -74,6 +104,7 @@ function GenerarReporte() {
         descripcion: descripcion,
     }; 
     
+    
     const token = Cookies.get('token');
 
     fetch('https://localhost:7047/api/Reportes', {
@@ -99,6 +130,15 @@ function GenerarReporte() {
             setTotalEntradasVendidas('');
             setTotalAsistencias('');
 
+        }else if(response.status === 401){
+            Swal.fire({
+                icon: 'error',
+                title: 'Sesión expirada',
+                text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+            }).then(() => {
+                Cookies.remove('token');
+                window.location.href = '/login';
+            });
         }else{
             const msg = await response.text();
             Swal.fire({
@@ -132,6 +172,7 @@ function GenerarReporte() {
                     </label>
                     <input type="text" id="tituloReporte" className="border rounded-md w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"required
                     maxLength={100}
+                    minLength={3}
                     placeholder="Ingrese el título del reporte"
                     value={titulo}
                     onChange={(e) => setTitulo(e.target.value)}
@@ -145,6 +186,7 @@ function GenerarReporte() {
                     <textarea id="descripcion" className="w-full h-48 bg-white p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"required
                     placeholder='Ingrese una descripción del reporte'
                     maxLength={500}
+                    minLength={3}
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
                     />
@@ -186,6 +228,8 @@ function GenerarReporte() {
                     </label>
                     <input type="number" id="totalEntradasVendidas" className="border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"required
                     value={totalEntradasVendidas}
+                    min={0}
+                    max={aforoMaximo}
                     onChange={(e) => setTotalEntradasVendidas(e.target.value)}
                     />
                 </div>
@@ -196,6 +240,8 @@ function GenerarReporte() {
                     </label>
                     <input type="number" id="totalAsistencias" className="border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"required
                     value={totalAsistencias}
+                    min={0}
+                    max={totalEntradasVendidas}
                     onChange={(e) => setTotalAsistencias(e.target.value)}
                     />
                 </div>

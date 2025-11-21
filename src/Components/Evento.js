@@ -21,6 +21,17 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     const handleImagen = (e) => {
         const file = e.target.files[0]; 
         if(file){
+            // Validar formato de imagen
+            const formatosPermitidos = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!formatosPermitidos.includes(file.type)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Solo se permiten imágenes en formato JPG, JPEG o PNG',
+                });
+                e.target.value = ''; // Limpiar el input
+                return;
+            }
             setImagen(file);
             setVerImagen(URL.createObjectURL(file)); 
         }
@@ -66,6 +77,16 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
 
     const handleSubmit = (e) => {
             e.preventDefault();
+
+            // Validar que se haya seleccionado una imagen
+            if (!imagen) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar una imagen',
+                });
+                return;
+            }
 
              const FechaHora = `${fecha}T${hora}`; // Combina fecha y hora en un solo string
             
@@ -165,18 +186,20 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
 
                 <div className="mb-4">
                     <label className=" text-gray-700 text-sm font-bold mb-2">Direccion</label>
-                    <input type="text" placeholder="Direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)}
+                    <input type="text" placeholder="Direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)} maxLength={20} minLength={2}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
     
                 <div className="mb-4">
                     <label  className=" text-gray-700 text-sm font-bold mb-2">Fecha</label>
                     <input type="date" placeholder="Fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} 
+                    min={new Date().toISOString().split('T')[0]}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
                 <div className="mb-4">
                     <label className="text-gray-700 text-sm font-bold mb-2">Hora</label>
                     <input type="time" placeholder="Hora" value={hora} onChange={(e) => setHora(e.target.value)} 
+                    step="60"
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue 500" required/>
                 </div>
     
@@ -185,7 +208,7 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                     <label htmlFor='Imagen' className="cursor-pointer border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
                         Selecciona una imagen
                     </label>
-                    <input type="file" accept="image/*" id='Imagen' onChange={handleImagen} style={{ display: 'none' }}
+                    <input type="file" accept=".jpg,.jpeg,.png" id='Imagen' onChange={handleImagen} style={{ display: 'none' }}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
 
@@ -197,7 +220,7 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     
                 <div className='mb-6 md:col-span-2'>
                     <label>Descripcion</label>
-                    <textarea placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} rows="4"
+                    <textarea placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} rows="4" minLength={2} maxLength={200}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                 </div>
     

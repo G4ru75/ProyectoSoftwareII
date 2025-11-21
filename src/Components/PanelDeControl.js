@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import PanelDeControlStyles from "../Styles/PanelDeControl.module.css";
 import NavbarAdmin from "./NavbarAdmin";
 import Footer from "./Footer";
@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import GenerarReporte from "./GenerarReportes";
 import ListaReportes from "./ListaReportes";
+import { useNavigate } from "react-router-dom";
 
 
 const STYLES = {
@@ -43,6 +44,46 @@ const STYLES = {
 }
 
 function PanelDeControl() {
+    
+    const navigate = useNavigate();
+
+    // Verificar si el usuario es administrador
+    useEffect(() => {
+        const token = Cookies.get('token');
+        const userCookie = Cookies.get('user');
+        
+        if (!token || !userCookie) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Acceso denegado',
+                text: 'Debes iniciar sesión para acceder al panel de administración.',
+                confirmButtonText: 'Iniciar Sesión',
+                allowOutsideClick: false
+            }).then(() => {
+                navigate('/login');
+            });
+            return;
+        }
+        
+        try {
+            const user = JSON.parse(userCookie);
+            
+            if (user.rol !== 'Admin' && user.rol !== 'admin' && user.rol !== 'Administrador') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Acceso denegado',
+                    text: 'No tienes permisos de administrador para acceder a esta página.',
+                    confirmButtonText: 'Volver al inicio',
+                    allowOutsideClick: false
+                }).then(() => {
+                    navigate('/PaginaPrincipal');
+                });
+            }
+        } catch (error) {
+            console.error('Error al verificar usuario:', error);
+            navigate('/login');
+        }
+    }, [navigate]);
 
     //Estados para eventos
     const [mostrarAgregarEvento, setMostrarAgregarEvento] = useState(false);
