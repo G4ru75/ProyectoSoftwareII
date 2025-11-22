@@ -37,7 +37,19 @@ function EspecificacionDeCompra({ handleClose }) {
                 navigate('/login');
             });
         }
-    }, [navigate]); 
+        
+        // Verificar si hay tickets disponibles al cargar
+        if (ticketsDisponibles === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Evento agotado',
+                text: 'Lo sentimos, este evento ya no tiene entradas disponibles.',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                navigate('/PaginaPrincipal');
+            });
+        }
+    }, [navigate, ticketsDisponibles]); 
 
     const precio = evento?.precioTicket || 0;
 
@@ -274,7 +286,7 @@ function EspecificacionDeCompra({ handleClose }) {
                                     type="button"
                                     className={especificacionStyle.quantityButton}
                                     onClick={() => setCantidad(Math.max(1, cantidad - 1))}
-                                    disabled={cantidad <= 1}
+                                    disabled={cantidad <= 1 || ticketsDisponibles === 0}
                                 >
                                     -
                                 </button>
@@ -283,15 +295,57 @@ function EspecificacionDeCompra({ handleClose }) {
                                     min={1}
                                     max={ticketsDisponibles}
                                     value={cantidad}
-                                    onChange={e => setCantidad(Number(e.target.value))}
+                                    onChange={e => {
+                                        const valor = Number(e.target.value);
+                                        if (valor < 1) {
+                                            setCantidad(1);
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Cantidad inválida',
+                                                text: 'Debes seleccionar al menos 1 entrada.',
+                                                toast: true,
+                                                position: 'top-end',
+                                                showConfirmButton: false,
+                                                timer: 3000
+                                            });
+                                        } else if (valor > ticketsDisponibles) {
+                                            setCantidad(ticketsDisponibles);
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Cantidad no disponible',
+                                                text: `Solo hay ${ticketsDisponibles} entradas disponibles.`,
+                                                toast: true,
+                                                position: 'top-end',
+                                                showConfirmButton: false,
+                                                timer: 3000
+                                            });
+                                        } else {
+                                            setCantidad(valor);
+                                        }
+                                    }}
                                     className={especificacionStyle.quantityInput}
+                                    disabled={ticketsDisponibles === 0}
                                     required
                                 />
                                 <button
                                     type="button"
                                     className={especificacionStyle.quantityButton}
-                                    onClick={() => setCantidad(Math.min(ticketsDisponibles, cantidad + 1))}
-                                    disabled={cantidad >= ticketsDisponibles}
+                                    onClick={() => {
+                                        if (cantidad >= ticketsDisponibles) {
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Límite alcanzado',
+                                                text: `No hay más entradas disponibles. Solo quedan ${ticketsDisponibles}.`,
+                                                toast: true,
+                                                position: 'top-end',
+                                                showConfirmButton: false,
+                                                timer: 3000
+                                            });
+                                        } else {
+                                            setCantidad(Math.min(ticketsDisponibles, cantidad + 1));
+                                        }
+                                    }}
+                                    disabled={cantidad >= ticketsDisponibles || ticketsDisponibles === 0}
                                 >
                                     +
                                 </button>
