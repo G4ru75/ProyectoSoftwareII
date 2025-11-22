@@ -1,5 +1,5 @@
 import { Minimize } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 
@@ -17,6 +17,7 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     const [imagen, setImagen] = useState(null);
     const [verImagen, setVerImagen] = useState('');
     const [descripcion, setDescripcion] = useState('');
+    const inputFileRef = useRef(null);
     
     const handleImagen = (e) => {
         const file = e.target.files[0]; 
@@ -137,6 +138,10 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                     setImagen(null);
                     setVerImagen("");
                     setDescripcion("");
+                    // Resetear el input file
+                    if (inputFileRef.current) {
+                        inputFileRef.current.value = '';
+                    }
                     
                     
                 } else {
@@ -211,11 +216,17 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     
                 <div className="mb-4">
                     <label className="text-gray-700 text-sm font-bold mb-2">Imagen</label>
-                    <label htmlFor='Imagen' className="cursor-pointer border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Selecciona una imagen
+                    <label htmlFor='Imagen' className="cursor-pointer border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 block">
+                        {imagen ? '✓ Imagen seleccionada' : 'Selecciona una imagen'}
                     </label>
-                    <input type="file" accept=".jpg,.jpeg,.png" id='Imagen' onChange={handleImagen} style={{ display: 'none' }}
-                    className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
+                    <input 
+                        type="file" 
+                        accept=".jpg,.jpeg,.png" 
+                        id='Imagen' 
+                        ref={inputFileRef}
+                        onChange={handleImagen} 
+                        style={{ display: 'none' }}
+                    />
                 </div>
 
                 {verImagen && (
