@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
+import Loader from './Loader';
 
 function GenerarReporte() {
 
@@ -11,6 +12,7 @@ function GenerarReporte() {
     const [totalEntradasVendidas, setTotalEntradasVendidas] = useState('');
     const [totalAsistencias, setTotalAsistencias] = useState('');
     const [listaEventos, setListaEventos] = useState([]);
+    const [Cargando, setCargando] = useState(false);
     
     useEffect(() => {
             fetch('https://localhost:7047/api/Eventos')
@@ -23,9 +25,15 @@ function GenerarReporte() {
                 .then(data => {
                     const EventosActivos = data.filter(evento => evento.estado == true)
                     setListaEventos(EventosActivos);
-                    console.log(EventosActivos);
                 })
-                .catch(error => console.error("Error al obtener eventos:", error));
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de conexión',
+                        text: 'No se pudieron cargar los eventos. Verifica tu conexión e intenta nuevamente.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
         }, []);
 
         useEffect(() => {
@@ -106,6 +114,7 @@ function GenerarReporte() {
     
     
     const token = Cookies.get('token');
+    setCargando(true);
 
     fetch('https://localhost:7047/api/Reportes', {
         method: 'POST', 
@@ -116,6 +125,7 @@ function GenerarReporte() {
 
         body: JSON.stringify(Reporte) 
     }).then(async (response) => {
+        setCargando(false);
         if (response.ok){
             Swal.fire({
                 icon: 'success',
@@ -130,6 +140,12 @@ function GenerarReporte() {
             setTotalEntradasVendidas('');
             setTotalAsistencias('');
 
+        }else if(response.status === 404){
+            Swal.fire({
+                icon: 'error',
+                title: 'Recurso no encontrado',
+                text: 'El recurso solicitado no fue encontrado en el servidor.',
+            });
         }else if(response.status === 401){
             Swal.fire({
                 icon: 'error',
@@ -148,10 +164,12 @@ function GenerarReporte() {
             });
         }
     }).catch((error) => {
+        setCargando(false);
         Swal.fire({
             icon: 'error', 
-            title: 'Error',
-            text: 'Error al generar el reporte'
+            title: 'Error de conexión',
+            text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+            confirmButtonText: 'Aceptar'
         })
     })
     
@@ -256,6 +274,11 @@ function GenerarReporte() {
             </button>
             </div>
         </form>
+        {Cargando && (
+            <div style={{position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999}}>
+                <Loader/>
+            </div>
+        )}
         </div>
     </div>
     )

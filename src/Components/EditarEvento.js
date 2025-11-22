@@ -29,8 +29,7 @@ function EditarEvento({ evento, onClose, onModificar }) {
     };  
 
     useEffect(() => {
-        console.log("Evento recibido:", evento);
-        if(evento){
+        if (evento) {
             setNombre(evento.nombre_Evento);
             setPrecio(evento.precioTicket);
             setTipoBoleta(evento.tipo_Boleta);
@@ -151,9 +150,6 @@ function EditarEvento({ evento, onClose, onModificar }) {
                             title: 'Error',
                             text: 'No se pudo agregar el evento',
                         });
-                        console.log(response);
-                        console.log(formEvento);
-                        console.log(token);
                     }
                 });
             }else{

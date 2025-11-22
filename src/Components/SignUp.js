@@ -102,7 +102,6 @@ const handleSubmit = (e) => {
 })
     
     } else {
-      console.log('Errores en el formulario:', errores);
     }
   };
 

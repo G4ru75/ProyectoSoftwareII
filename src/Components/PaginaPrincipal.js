@@ -8,8 +8,6 @@ import { getSecureUserData } from '../utils/securityHelpers';
 function PaginaPrincipal() {
         
     const user = getSecureUserData();
-    console.log("Usuario actual:", user);
-    
     const [filtros, setFiltros] = useState({
         busqueda: '',
         fecha: '',

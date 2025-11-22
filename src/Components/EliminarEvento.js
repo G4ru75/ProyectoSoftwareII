@@ -51,11 +51,9 @@ function EliminarEvento({ onClose, onEliminado }) {
                     //onEliminado(); // para refrescar desde el Panel 
                 } else {
                     Swal.fire("Error", "No se pudo eliminar el evento");
-                    console.log(res.status); 
                 }
             } catch (error) {
                 Swal.fire("Error", "No se pudo eliminar el evento", "error");
-                console.error("Error al eliminar evento:", error);
             }
         }
     };

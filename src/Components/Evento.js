@@ -2,6 +2,7 @@ import { Minimize } from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
+import Loader from './Loader';
 
 function Evento({ eventoInicial, onAgregar, onModificar }) {
     const [nombre, setNombre] = useState('');
@@ -17,6 +18,7 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     const [imagen, setImagen] = useState(null);
     const [verImagen, setVerImagen] = useState('');
     const [descripcion, setDescripcion] = useState('');
+    const [Cargando, setCargando] = useState(false);
     const inputFileRef = useRef(null);
     
     const handleImagen = (e) => {
@@ -109,17 +111,19 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
             formEvento.append('Categoria', categoriaSeleccionada);
             formEvento.append('Imagen', imagen); // Agregar la imagen al FormData
     
-            const token = Cookies.get('token'); 
+            const token = Cookies.get('token');
+            setCargando(true);
             
             fetch("https://localhost:7047/api/Eventos", {
                 method: "POST",
                 headers: {
                 "Authorization": `Bearer ${token}`, //Token de autenticacion 
-                //"Content-Type": "application/json"  no se usa porque no se envia datos en forma de JSon
+                //("Content-Type": "application/json"  no se usa porque no se envia datos en forma de JSon
                 },
     
                 body:formEvento // se envia el formEvento
             }).then((response) => {
+                setCargando(false);
                 if (response.ok) {
                     Swal.fire({
                         icon: 'success',
@@ -142,8 +146,15 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                     if (inputFileRef.current) {
                         inputFileRef.current.value = '';
                     }
+                    setDescripcion("");
                     
                     
+                } else if (response.status === 404) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Recurso no encontrado en el servidor.',
+                    });
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -151,10 +162,20 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                         text: 'No se pudo agregar el evento',
                     });
                 }
+            })
+            .catch(error => {
+                setCargando(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                    confirmButtonText: 'Aceptar'
+                });
             });
         }
     
     return (
+        <>
         <form onSubmit={handleSubmit} className='bg-gray-100 p-6  rounded-xl  w-full max-w-4xl mx-auto my-8'>
             <h1 className='text-2xl font-semibold text-gray-800 mb-4 text-center'>GESTIÓN EVENTO</h1>
             <div className="border-b-4 border-blue-500 mb-6"></div>
@@ -246,6 +267,12 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
             </div>
             <button type="submit" className='bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 focus:outline-none transform transition-all hover:scale-105'>Aceptar</button>
         </form>
+        {Cargando && (
+            <div style={{position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999}}>
+                <Loader/>
+            </div>
+        )}
+        </>
     );
 
 }   

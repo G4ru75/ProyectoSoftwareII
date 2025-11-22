@@ -114,47 +114,65 @@ function EspecificacionDeCompra({ handleClose }) {
             Id_Evento: evento.id_Evento
         };
 
-        setCargando(true); 
-        const res = await fetch(`https://localhost:7047/api/Tickets/${cantidad}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(ticketDto)
-        });
-
-        if (res.ok) {
-            setCargando(false);
-            
-            // Actualizar tickets disponibles
-            setTicketsDisponibles(prevTickets => prevTickets - cantidad);
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Compra exitosa',
-                text: `Has comprado ${cantidad} entradas para el evento ${evento.nombre_Evento}.`,
-                confirmButtonText: 'Aceptar'
+        setCargando(true);
+        try {
+            const res = await fetch(`https://localhost:7047/api/Tickets/${cantidad}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ticketDto)
             });
 
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            const resTickets = await fetch(`https://localhost:7047/api/Tickets/${userId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            if (res.ok) {
+                setCargando(false);
+                
+                // Actualizar tickets disponibles
+                setTicketsDisponibles(prevTickets => prevTickets - cantidad);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Compra exitosa',
+                    text: `Has comprado ${cantidad} entradas para el evento ${evento.nombre_Evento}.`,
+                    confirmButtonText: 'Aceptar'
+                });
 
-            if (resTickets.ok) {
-                const data = await resTickets.json();
-                const ultimoTicket = data.tickets[data.tickets.length - 1];
-                setTicket(ultimoTicket);
-                setTicketModalOpen(true);
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+                const resTickets = await fetch(`https://localhost:7047/api/Tickets/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (resTickets.ok) {
+                    const data = await resTickets.json();
+                    const ultimoTicket = data.tickets[data.tickets.length - 1];
+                    setTicket(ultimoTicket);
+                    setTicketModalOpen(true);
+                }
+            } else if (res.status === 404) {
+                setCargando(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Recurso no encontrado',
+                    text: 'El evento o ticket solicitado no existe.',
+                    confirmButtonText: 'Aceptar'
+                });
+            } else {
+                setCargando(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error',
+                    text: `No se pudo completar la compra. Por favor, inténtelo de nuevo más tarde.`,
+                });
             }
-        } else {
+        } catch (error) {
             setCargando(false);
             Swal.fire({
                 icon: 'error',
-                title: 'Ha ocurrido un error',
-                text: `No se pudo completar la compra. Por favor, inténtelo de nuevo más tarde.`,
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor. Verifica tu conexión a internet e intenta nuevamente.',
+                confirmButtonText: 'Aceptar'
             });
         }
     };
