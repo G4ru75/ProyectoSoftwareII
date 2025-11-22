@@ -164,11 +164,12 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                     <label class="text-gray-700 text-sm font-bold mb-2">Nombre</label>
 
                     <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)}
+                    minLength={3} maxLength={50}
                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                 </div>
                 <div className="mb-4">
                     <label  class="text-gray-700 text-sm font-bold mb-2">Precio</label>
-                    <input type="number" placeholder="Precio" value={precio} onChange={(e) => setPrecio(e.target.value)} min={1} pattern='[0-9]+' 
+                    <input type="number" placeholder="Precio" value={precio} onChange={(e) => setPrecio(e.target.value)} min={1} step="0.01"
                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
 
                 </div>
@@ -186,18 +187,19 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
     
                 <div className="mb-4">
                     <label  className="text-gray-700 text-sm font-bold mb-2">Aforo</label>
-                    <input type="text" placeholder="Aforo" value={aforo} onChange={(e) => setAforo(e.target.value)} min={1} pattern='[0-9]+'
+                    <input type="number" placeholder="Aforo" value={aforo} onChange={(e) => setAforo(e.target.value)} min={1}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
                 <div className="mb-4">
                     <label className=" text-gray-700 text-sm font-bold mb-2">Lugar</label>
                     <input type="text" placeholder="Nombre del lugar" value={lugar} onChange={(e) => setLugar(e.target.value)}
+                    minLength={2} maxLength={30}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
 
                 <div className="mb-4">
                     <label className=" text-gray-700 text-sm font-bold mb-2">Direccion</label>
-                    <input type="text" placeholder="Direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)} maxLength={20} minLength={2}
+                    <input type="text" placeholder="Direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)} minLength={2} maxLength={30}
                     className=" border rounded-md w-full py-2 px-3 text-gray-700  focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                 </div>
     
