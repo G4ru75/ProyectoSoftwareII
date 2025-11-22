@@ -106,6 +106,16 @@ function Login() {
             navegar('/paginaAdmin'); //Ir a panel de control si el usuario es admin
           }
         }
+      })
+      .catch(error => {
+        setCargando(false);
+        console.error('Error de conexión:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Servicio no disponible',
+          text: 'No se pudo conectar con el servidor. Por favor, verifica tu conexión o intenta más tarde.',
+          confirmButtonText: 'Aceptar'
+        });
       });
   }else {
     console.log('Errores en el formulario:', errores);
