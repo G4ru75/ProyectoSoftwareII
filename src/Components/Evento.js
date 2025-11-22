@@ -33,7 +33,13 @@ function Evento({ eventoInicial, onAgregar, onModificar }) {
                 return;
             }
             setImagen(file);
-            setVerImagen(URL.createObjectURL(file)); 
+            
+            // Usar FileReader para mejor compatibilidad en producción
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setVerImagen(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };  
 
