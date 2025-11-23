@@ -17,55 +17,62 @@ function CompraBoleta() {
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
     
-    // Función para obtener y actualizar los datos del evento
-    const obtenerEvento = async () => {
-        if (!id) return;
-        
-        try {
-            const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
-            if (response.ok) {
-                const eventoData = await response.json();
-                setEvento(eventoData);
-                setCargando(false);
-            } else if (response.status === 404) {
-                setError('Evento no encontrado');
-                setCargando(false);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Evento no encontrado',
-                    text: 'El evento que buscas no existe o ha sido eliminado.',
-                    confirmButtonText: 'Volver'
-                }).then(() => {
-                    navigate('/PaginaPrincipal');
-                });
-            } else {
-                throw new Error('Error al obtener el evento');
-            }
-        } catch (error) {
-            setError('Error de conexión');
+    // Obtener evento al montar el componente y actualizar cada 5 segundos
+    useEffect(() => {
+        if (!id) {
             setCargando(false);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error de conexión',
-                text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
-                confirmButtonText: 'Volver'
-            }).then(() => {
-                navigate('/PaginaPrincipal');
-            });
+            return;
         }
-    };
-    
-    // Obtener evento al montar el componente
-    useEffect(() => {
+        
+        // Función para obtener y actualizar los datos del evento
+        const obtenerEvento = async () => {
+            try {
+                const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
+                if (response.ok) {
+                    const eventoData = await response.json();
+                    setEvento(eventoData);
+                    setError(null);
+                    if (cargando) setCargando(false);
+                } else if (response.status === 404) {
+                    if (cargando) {
+                        setError('Evento no encontrado');
+                        setCargando(false);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Evento no encontrado',
+                            text: 'El evento que buscas no existe o ha sido eliminado.',
+                            confirmButtonText: 'Volver'
+                        }).then(() => {
+                            navigate('/PaginaPrincipal');
+                        });
+                    }
+                } else {
+                    throw new Error('Error al obtener el evento');
+                }
+            } catch (error) {
+                if (cargando) {
+                    setError('Error de conexión');
+                    setCargando(false);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de conexión',
+                        text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                        confirmButtonText: 'Volver'
+                    }).then(() => {
+                        navigate('/PaginaPrincipal');
+                    });
+                }
+            }
+        };
+        
+        // Obtener evento inmediatamente
         obtenerEvento();
-    }, [id]);
-    
-    // Actualizar evento cada 5 segundos
-    useEffect(() => {
-        if (!evento) return;
+        
+        // Actualizar cada 5 segundos
         const intervalo = setInterval(obtenerEvento, 5000);
+        
         return () => clearInterval(intervalo);
-    }, [evento]);
+    }, [id, navigate]);
     
     if (cargando) {
         return <Loader />;

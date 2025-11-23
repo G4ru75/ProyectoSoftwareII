@@ -15,7 +15,7 @@ function EspecificacionDeCompra({ handleClose }) {
     
     const [evento, setEvento] = useState(null);
     const [cantidad, setCantidad] = useState(1);
-    const [categoria, setCategoria] = useState('');
+    const [categoria, setCategoria] = useState('Premium');
     const [metodoPago, setMetodoPago] = useState('');
     const [ticketModalOpen, setTicketModalOpen] = useState(false);
     const [ticket, setTicket] = useState(null);
