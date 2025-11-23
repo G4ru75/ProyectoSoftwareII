@@ -15,7 +15,7 @@ function CompraBoleta() {
     
     const [evento, setEvento] = useState(null);
     const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState(null);
+    const [errorMostrado, setErrorMostrado] = useState(false);
     
     // Obtener evento al montar el componente y actualizar cada 5 segundos
     useEffect(() => {
@@ -24,19 +24,22 @@ function CompraBoleta() {
             return;
         }
         
+        let isMounted = true;
+        
         // Función para obtener y actualizar los datos del evento
         const obtenerEvento = async () => {
             try {
                 const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
+                if (!isMounted) return;
+                
                 if (response.ok) {
                     const eventoData = await response.json();
                     setEvento(eventoData);
-                    setError(null);
-                    if (cargando) setCargando(false);
+                    setCargando(false);
                 } else if (response.status === 404) {
-                    if (cargando) {
-                        setError('Evento no encontrado');
-                        setCargando(false);
+                    setCargando(false);
+                    if (!errorMostrado) {
+                        setErrorMostrado(true);
                         Swal.fire({
                             icon: 'error',
                             title: 'Evento no encontrado',
@@ -50,9 +53,11 @@ function CompraBoleta() {
                     throw new Error('Error al obtener el evento');
                 }
             } catch (error) {
-                if (cargando) {
-                    setError('Error de conexión');
-                    setCargando(false);
+                if (!isMounted) return;
+                
+                setCargando(false);
+                if (!errorMostrado) {
+                    setErrorMostrado(true);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error de conexión',
@@ -71,8 +76,11 @@ function CompraBoleta() {
         // Actualizar cada 5 segundos
         const intervalo = setInterval(obtenerEvento, 5000);
         
-        return () => clearInterval(intervalo);
-    }, [id, navigate]);
+        return () => {
+            isMounted = false;
+            clearInterval(intervalo);
+        };
+    }, [id, navigate, errorMostrado]);
     
     if (cargando) {
         return <Loader />;
