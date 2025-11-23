@@ -39,7 +39,7 @@ function Signup() {
     }
       
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email && !/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(email)) {
         errores.email = 'El email no es válido';
     }
 
@@ -166,7 +166,7 @@ const handleSubmit = (e) => {
             <label>Email</label>
             <input type="email" 
             placeholder='Digite su email'
-            pattern='[^\s@]+@[^\s@]+\.[^\s@]+'
+            pattern='[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}'
             title="El email debe tener un formato válido"
             required
             value={email}
