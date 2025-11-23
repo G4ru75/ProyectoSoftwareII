@@ -86,7 +86,7 @@ function CompraBoleta() {
         return <Loader />;
     }
     
-    if (error || !evento) {
+    if (!evento) {
         return null; // El error ya se maneja con el Swal
     }
 
