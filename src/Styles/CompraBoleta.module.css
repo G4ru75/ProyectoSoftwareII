@@ -76,6 +76,24 @@
     text-transform: capitalize;
 }
 
+.eventoPasadoBadge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(239, 68, 68, 0.95);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    letter-spacing: 1px;
+}
+
 .eventTitle {
     font-size: 36px;
     font-weight: 800;

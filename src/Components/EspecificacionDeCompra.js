@@ -44,6 +44,23 @@ function EspecificacionDeCompra({ handleClose }) {
                 const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
                 if (response.ok) {
                     const eventoData = await response.json();
+                    
+                    // Verificar si el evento ya pasó
+                    const fechaEvento = new Date(eventoData.fecha);
+                    const fechaActual = new Date();
+                    
+                    if (fechaEvento < fechaActual) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Evento finalizado',
+                            text: 'Este evento ya ha finalizado. No es posible comprar boletas.',
+                            confirmButtonText: 'Volver'
+                        }).then(() => {
+                            navigate('/PaginaPrincipal');
+                        });
+                        return;
+                    }
+                    
                     setEvento(eventoData);
                     setTicketsDisponibles(eventoData.tickets_Disponible);
                     

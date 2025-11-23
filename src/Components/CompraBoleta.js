@@ -101,9 +101,23 @@ function CompraBoleta() {
         hour: '2-digit', 
         minute: '2-digit' 
     });
+    
+    // Verificar si el evento ya pasó
+    const fechaActual = new Date();
+    const eventoPasado = fechaCompleta < fechaActual;
 
 
     const IrAEspecificacionCompra = () => {
+        // Verificar si el evento ya pasó
+        if (eventoPasado) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Evento finalizado',
+                text: 'Este evento ya ha finalizado. No es posible comprar boletas.',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
         // Verificar si hay un usuario logueado
         const token = Cookies.get('token');
         
@@ -148,10 +162,16 @@ return (
                         <p>Sin imagen disponible</p>
                     </div>
                 )}
-                <div className={compraBoleta.categoryBadge}>
-                    <Tag size={16} />
-                    {evento.categoria}
-                </div>
+                {eventoPasado ? (
+                    <div className={compraBoleta.eventoPasadoBadge}>
+                        EVENTO FINALIZADO
+                    </div>
+                ) : (
+                    <div className={compraBoleta.categoryBadge}>
+                        <Tag size={16} />
+                        {evento.categoria}
+                    </div>
+                )}
             </div>
 
             {/* Título del evento */}
@@ -250,9 +270,9 @@ return (
                 <button 
                     className={compraBoleta.buyButton}
                     onClick={IrAEspecificacionCompra}
-                    disabled={evento.tickets_Disponible === 0}
+                    disabled={evento.tickets_Disponible === 0 || eventoPasado}
                 >
-                    {evento.tickets_Disponible > 0 ? 'Comprar Entradas' : 'Agotado'}
+                    {eventoPasado ? 'Evento Finalizado' : (evento.tickets_Disponible > 0 ? 'Comprar Entradas' : 'Agotado')}
                 </button>
 
                 <div className={compraBoleta.statusBadge}>

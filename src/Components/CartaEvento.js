@@ -19,6 +19,11 @@ function CartaEvento({ evento }) {
         year: 'numeric'
     });
     const horaFormateada = new Date(evento.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    // Verificar si el evento ya pasó
+    const fechaEvento = new Date(evento.fecha);
+    const fechaActual = new Date();
+    const eventoPasado = fechaEvento < fechaActual;
 
     return (
         <div className={cartaEventoStyle.tarjeta}>
@@ -29,12 +34,20 @@ function CartaEvento({ evento }) {
                     alt={evento.nombre_Evento} 
                     className={cartaEventoStyle.imagen}
                 />
+                {/* Badge de evento pasado */}
+                {eventoPasado && (
+                    <div className={cartaEventoStyle.eventoPasadoBadge}>
+                        Evento Finalizado
+                    </div>
+                )}
                 {/* Badge de categoría */}
-                <div className={cartaEventoStyle.badge}>
-                    {evento.categoria}
-                </div>
+                {!eventoPasado && (
+                    <div className={cartaEventoStyle.badge}>
+                        {evento.categoria}
+                    </div>
+                )}
                 {/* Badge de tickets disponibles */}
-                {evento.tickets_Disponible < 20 && (
+                {!eventoPasado && evento.tickets_Disponible < 20 && (
                     <div className={cartaEventoStyle.ticketsBadge}>
                         <Ticket size={14} />
                         {evento.tickets_Disponible} disponibles
@@ -70,8 +83,12 @@ function CartaEvento({ evento }) {
                         <span className={cartaEventoStyle.precioLabel}>Desde</span>
                         <span className={cartaEventoStyle.precioValor}>${evento.precioTicket}</span>
                     </div>
-                    <button className={cartaEventoStyle.boton} onClick={IrAEvento}>
-                        Ver detalles
+                    <button 
+                        className={`${cartaEventoStyle.boton} ${eventoPasado ? cartaEventoStyle.botonDeshabilitado : ''}`} 
+                        onClick={IrAEvento}
+                        disabled={eventoPasado}
+                    >
+                        {eventoPasado ? 'Evento finalizado' : 'Ver detalles'}
                     </button>
                 </div>
             </div>
