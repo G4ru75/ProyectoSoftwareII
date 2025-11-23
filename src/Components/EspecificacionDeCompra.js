@@ -1,6 +1,6 @@
 import NavBar from './navbar';
 import Footer from './Footer';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Ticket from './Ticket';
@@ -10,46 +10,83 @@ import { ShoppingCart, Calendar, Tag, CreditCard, Ticket as TicketIcon, DollarSi
 import especificacionStyle from '../Styles/EspecificacionDeCompra.module.css';
 
 function EspecificacionDeCompra({ handleClose }) {
-    const location = useLocation();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const evento = location.state?.evento;
-
+    
+    const [evento, setEvento] = useState(null);
     const [cantidad, setCantidad] = useState(1);
-    const [categoria, setCategoria] = useState(evento?.categoria || '');
+    const [categoria, setCategoria] = useState('');
     const [metodoPago, setMetodoPago] = useState('');
     const [ticketModalOpen, setTicketModalOpen] = useState(false);
     const [ticket, setTicket] = useState(null);
-    const [Cargando, setCargando] = useState(false);
-    const [ticketsDisponibles, setTicketsDisponibles] = useState(evento?.tickets_Disponible || 0);
+    const [Cargando, setCargando] = useState(true);
+    const [ticketsDisponibles, setTicketsDisponibles] = useState(0);
     
-    // Verificar si hay sesión al cargar el componente
+    // Obtener evento por ID
     useEffect(() => {
-        const token = Cookies.get('token');
+        const obtenerEvento = async () => {
+            const token = Cookies.get('token');
+            
+            if (!token) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Sesión requerida',
+                    text: 'Debes iniciar sesión para poder comprar boletas.',
+                    confirmButtonText: 'Iniciar Sesión',
+                    allowOutsideClick: false
+                }).then(() => {
+                    navigate('/login');
+                });
+                return;
+            }
+            
+            try {
+                const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
+                if (response.ok) {
+                    const eventoData = await response.json();
+                    setEvento(eventoData);
+                    setTicketsDisponibles(eventoData.tickets_Disponible);
+                    
+                    // Verificar si hay tickets disponibles
+                    if (eventoData.tickets_Disponible === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Evento agotado',
+                            text: 'Lo sentimos, este evento ya no tiene entradas disponibles.',
+                            confirmButtonText: 'Aceptar'
+                        }).then(() => {
+                            navigate('/PaginaPrincipal');
+                        });
+                    }
+                    setCargando(false);
+                } else if (response.status === 404) {
+                    setCargando(false);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Evento no encontrado',
+                        text: 'El evento que buscas no existe o ha sido eliminado.',
+                        confirmButtonText: 'Volver'
+                    }).then(() => {
+                        navigate('/PaginaPrincipal');
+                    });
+                } else {
+                    throw new Error('Error al obtener el evento');
+                }
+            } catch (error) {
+                setCargando(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                    confirmButtonText: 'Volver'
+                }).then(() => {
+                    navigate('/PaginaPrincipal');
+                });
+            }
+        };
         
-        if (!token) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Sesión requerida',
-                text: 'Debes iniciar sesión para poder comprar boletas.',
-                confirmButtonText: 'Iniciar Sesión',
-                allowOutsideClick: false
-            }).then(() => {
-                navigate('/login');
-            });
-        }
-        
-        // Verificar si hay tickets disponibles al cargar
-        if (ticketsDisponibles === 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Evento agotado',
-                text: 'Lo sentimos, este evento ya no tiene entradas disponibles.',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                navigate('/PaginaPrincipal');
-            });
-        }
-    }, [navigate, ticketsDisponibles]); 
+        obtenerEvento();
+    }, [id, navigate]); 
 
     const precio = evento?.precioTicket || 0;
 
@@ -189,8 +226,12 @@ function EspecificacionDeCompra({ handleClose }) {
         }
     };
 
+    if (Cargando) {
+        return <Loader />;
+    }
+
     if (!evento) {
-        return <p className='text-center mt-10 text-red-500'>No se ha seleccionado ningún evento.</p>;
+        return null; // El error ya se maneja con el Swal
     }
 
     return (

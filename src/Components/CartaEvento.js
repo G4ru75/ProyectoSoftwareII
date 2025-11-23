@@ -9,7 +9,7 @@ function CartaEvento({ evento }) {
     if (!evento) return null;
 
     const IrAEvento = () => {
-        navigate(`/evento`, {state: { evento } });
+        navigate(`/evento/${evento.id_Evento}`);
         window.scrollTo(0, 0);
     };
 

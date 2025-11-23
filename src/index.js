@@ -38,8 +38,8 @@ root.render(
           <Route path="/signup" element={<PaginaSignUp />} />
           <Route path="/login" element={<PaginaLogin />} />
           <Route path="/informacion" element={<PaginaInformacion />} />
-          <Route path="/evento" element={<CompraBoleta />} />
-          <Route path="/especificacionCompra" element={<EspecificacioDeCompra />} />
+          <Route path="/evento/:id" element={<CompraBoleta />} />
+          <Route path="/especificacionCompra/:id" element={<EspecificacioDeCompra />} />
       </Routes>
     </BrowserRouter>
 

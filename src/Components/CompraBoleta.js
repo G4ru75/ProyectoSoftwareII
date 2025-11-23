@@ -1,44 +1,78 @@
 import Footer from "./Footer"
 import NavBar from "./navbar"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import Cookies from 'js-cookie'
 import Swal from 'sweetalert2'
 import { MapPin, Calendar, Clock, Tag, Ticket, DollarSign, Info } from 'lucide-react'
 import compraBoleta from '../Styles/CompraBoleta.module.css'
+import Loader from './Loader'
 
 function CompraBoleta() {
 
     const navigate = useNavigate();
-    const Location = useLocation();
-    const eventoInicial = Location.state?.evento;
+    const { id } = useParams();
     
-    const [evento, setEvento] = useState(eventoInicial);
+    const [evento, setEvento] = useState(null);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState(null);
     
-    // Función para actualizar los datos del evento
-    const actualizarEvento = async () => {
-        if (!eventoInicial?.id_Evento) return;
+    // Función para obtener y actualizar los datos del evento
+    const obtenerEvento = async () => {
+        if (!id) return;
         
         try {
-            const response = await fetch(`https://localhost:7047/api/Eventos/${eventoInicial.id_Evento}`);
+            const response = await fetch(`https://localhost:7047/api/Eventos/${id}`);
             if (response.ok) {
-                const eventoActualizado = await response.json();
-                setEvento(eventoActualizado);
+                const eventoData = await response.json();
+                setEvento(eventoData);
+                setCargando(false);
+            } else if (response.status === 404) {
+                setError('Evento no encontrado');
+                setCargando(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Evento no encontrado',
+                    text: 'El evento que buscas no existe o ha sido eliminado.',
+                    confirmButtonText: 'Volver'
+                }).then(() => {
+                    navigate('/PaginaPrincipal');
+                });
+            } else {
+                throw new Error('Error al obtener el evento');
             }
         } catch (error) {
-            console.error('Error al actualizar evento:', error);
+            setError('Error de conexión');
+            setCargando(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                confirmButtonText: 'Volver'
+            }).then(() => {
+                navigate('/PaginaPrincipal');
+            });
         }
     };
     
-    // Actualizar evento al montar el componente y cada 5 segundos
+    // Obtener evento al montar el componente
     useEffect(() => {
-        actualizarEvento();
-        const intervalo = setInterval(actualizarEvento, 5000);
-        return () => clearInterval(intervalo);
-    }, [eventoInicial?.id_Evento]);
+        obtenerEvento();
+    }, [id]);
     
-    if (!evento) {
-        return <p className='text-center mt-10 text-red-500'>No se ha seleccionado ningún evento.</p>;
+    // Actualizar evento cada 5 segundos
+    useEffect(() => {
+        if (!evento) return;
+        const intervalo = setInterval(obtenerEvento, 5000);
+        return () => clearInterval(intervalo);
+    }, [evento]);
+    
+    if (cargando) {
+        return <Loader />;
+    }
+    
+    if (error || !evento) {
+        return null; // El error ya se maneja con el Swal
     }
 
     const fechaCompleta = new Date(evento.fecha);
@@ -74,7 +108,7 @@ function CompraBoleta() {
             return;
         }
         
-        navigate("/especificacionCompra", {state:{evento}}); // Pasa evento por state
+        navigate(`/especificacionCompra/${evento.id_Evento}`);
     }
 
 return (
