@@ -49,7 +49,7 @@ function ListaReportes({ onClose, modoSeleccion = false, onSeleccionarReporte })
                                 <tr key={reporte.id_Reporte}>
                                     <td>{reporte.nombre_Reporte}</td>
                                     <td>{reporte.nombre_Evento}</td>
-                                    <td>{reporte.n_ventas}</td>
+                                    <td>{reporte.n_Ventas}</td>
                                     <td>{reporte.n_Asistencias}</td>
                                     <td>{reporte.descripcion}</td>
                                     {modoSeleccion && (
