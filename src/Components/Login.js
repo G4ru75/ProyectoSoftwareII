@@ -118,7 +118,7 @@ function Login() {
         });
       });
   }else {
-    console.log('Errores en el formulario:', errores);
+    //console.log('Errores en el formulario:', errores);
   }
   }; 
 

@@ -1,29 +1,324 @@
-.infoMain {
-    min-height: 80vh;
-    width: 100%;
-    background: #f9f9f9;
-    padding: 3rem 0;
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 80px 24px;
+    text-align: center;
+    color: white;
 }
 
-.infoSection {
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.heroIcon {
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.heroTitle {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 20px 0 16px;
+    letter-spacing: -1px;
+}
+
+.heroSubtitle {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0.95;
+}
+
+/* Main Container */
+.infoMain {
+    background: #f8fafc;
+    padding: 0;
+}
+
+/* Description Section */
+.descriptionSection {
+    padding: 60px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.descriptionCard {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.sectionTitle {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+.descriptionText {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #475569;
+    margin: 0;
+}
+
+/* Features Section */
+.featuresSection {
+    padding: 60px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+}
+
+.featureCard {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.featureCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.featureIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.featureTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 12px;
+}
+
+.featureText {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Stats Section */
+.statsSection {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px 24px;
+    color: white;
+}
+
+.statsGrid {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
 }
 
-.infoTitle {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    color: #2979ff;
+.statCard {
+    text-align: center;
 }
 
-.infoText {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: #222;
+.statIcon {
+    margin-bottom: 16px;
+    opacity: 0.9;
 }
 
-.infoContact {
-    margin-top: 2rem;
-    font-size: 1.1rem;
+.statNumber {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.statLabel {
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Contact Section */
+.contactSection {
+    padding: 60px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.contactCard {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.contactIntro {
+    font-size: 16px;
+    color: #64748b;
+    text-align: center;
+    margin: 0 0 32px;
+}
+
+.contactInfo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.contactIconWrapper {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.contactLabel {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.contactValue {
+    font-size: 16px;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* CTA Section */
+.ctaSection {
+    background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+    padding: 80px 24px;
+    text-align: center;
+}
+
+.ctaContent {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.ctaTitle {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 16px;
+    line-height: 1.3;
+}
+
+.ctaText {
+    font-size: 18px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 60px 20px;
+    }
+
+    .heroTitle {
+        font-size: 32px;
+    }
+
+    .heroSubtitle {
+        font-size: 16px;
+    }
+
+    .descriptionSection,
+    .featuresSection,
+    .contactSection {
+        padding: 40px 20px;
+    }
+
+    .descriptionCard,
+    .contactCard {
+        padding: 28px;
+    }
+
+    .sectionTitle {
+        font-size: 26px;
+    }
+
+    .descriptionText {
+        font-size: 15px;
+    }
+
+    .featuresGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .statsSection {
+        padding: 40px 20px;
+    }
+
+    .statsGrid {
+        gap: 28px;
+    }
+
+    .statNumber {
+        font-size: 32px;
+    }
+
+    .contactInfo {
+        grid-template-columns: 1fr;
+    }
+
+    .ctaSection {
+        padding: 60px 20px;
+    }
+
+    .ctaTitle {
+        font-size: 24px;
+    }
+
+    .ctaText {
+        font-size: 16px;
+    }
 }
