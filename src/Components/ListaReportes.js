@@ -5,9 +5,10 @@ import Cookies from "js-cookie";
 function ListaReportes({ onClose, modoSeleccion = false, onSeleccionarReporte }) {
     const [reportes, setReportes] = useState([]);
     const [cargando, setCargando] = useState(true);
-
+    //Prueba con sonarcloud
     useEffect(() => {
         const token = Cookies.get('token');
+        console.log(token);
         fetch("https://localhost:7047/api/Reportes", {
             headers: {
                 "Authorization": `Bearer ${token}`
